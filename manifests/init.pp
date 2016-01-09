@@ -60,8 +60,10 @@
 class redmine_dms (
   $redmine_version  = $redmine_dms::params::redmine_version,
   $redmine_sys_user = $redmine_dms::params::redmine_sys_user,
+  $redmine_rootdir  = $redmine_dms::params::redmine_rootdir,
   $redmine_projects = $redmine_dms::params::redmine_projects,
   $redmine_site     = $redmine_dms::params::redmine_site,
+  $server_aliases   = $redmine_dms::params::server_aliases,
   $db_name          = $redmine_dms::params::db_name,
   $db_user          = $redmine_dms::params::db_user,
   $db_password      = $redmine_dms::params::db_password,
@@ -96,7 +98,6 @@ class redmine_dms (
 
   # REDMINE STAGE
 
-  $redmine_rootdir  = "/srv/${redmine_sys_user}"
   $redmine_dir      = "${redmine_rootdir}/current"
 
   # Unfortunatelly this causes total freeze of puppet agent process
@@ -204,21 +205,12 @@ class redmine_dms (
 
 
   # Web server for Redmine
-  class { 'nginx':
+  if !defined(Class['nginx']) {
+    class { 'nginx': }
   }
-  nginx::vhost { "$redmine_site":
-    docroot        => undef,
-    create_docroot => false,
-    template       => 'redmine_dms/nginx_redmine_site.conf.erb',
-    options        => { 'serveraliases'        => "${redmine_site}.${domain}",
-                        'upstream_web'         => 'upstream-web-puma-redmine',
-                        'upstream_socket_path' => "${redmine_rootdir}/current/tmp/sockets/puma.socket"
-                      }
-  }
-  # Remove the default site
-  file { "${nginx::config_dir}/sites-enabled/default":
-    ensure => absent,
-    notify => Service['nginx'],
+  redmine::vhost_nginx { "$redmine_site":
+    root_dir      => $redmine_rootdir,
+    serveraliases => [ $server_aliases ],
   }
 
 }

@@ -19,8 +19,10 @@
 class redmine_dms::params {
   $redmine_version  = '3.2.0'
   $redmine_sys_user = 'redmine'
+  $redmine_rootdir  = '/srv/redmine'
   $redmine_projects = []
   $redmine_site     = 'redmine'
+  $server_aliases   = []
   $db_name          = undef
   $db_user          = undef
   $db_password      = undef
