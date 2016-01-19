@@ -58,16 +58,18 @@
 # Copyright 2016 Braiins Systems s.r.o.
 #
 class redmine_dms (
-  $redmine_version  = $redmine_dms::params::redmine_version,
-  $redmine_sys_user = $redmine_dms::params::redmine_sys_user,
-  $redmine_rootdir  = $redmine_dms::params::redmine_rootdir,
-  $redmine_projects = $redmine_dms::params::redmine_projects,
-  $redmine_site     = $redmine_dms::params::redmine_site,
-  $server_aliases   = $redmine_dms::params::server_aliases,
-  $db_name          = $redmine_dms::params::db_name,
-  $db_user          = $redmine_dms::params::db_user,
-  $db_password      = $redmine_dms::params::db_password,
-  $chklst_vcs_repo  = $redmine_dms::params::chklst_vcs_repo,
+  $redmine_version     = $redmine_dms::params::redmine_version,
+  $redmine_sys_user    = $redmine_dms::params::redmine_sys_user,
+  $redmine_rootdir     = $redmine_dms::params::redmine_rootdir,
+  $redmine_projects    = $redmine_dms::params::redmine_projects,
+  $redmine_site        = $redmine_dms::params::redmine_site,
+  $server_aliases      = $redmine_dms::params::server_aliases,
+  $db_name             = $redmine_dms::params::db_name,
+  $db_user             = $redmine_dms::params::db_user,
+  $db_password         = $redmine_dms::params::db_password,
+  $chklst_vcs_repo     = $redmine_dms::params::chklst_vcs_repo,
+  $agile_vcs_repo      = $redmine_dms::params::agile_vcs_repo,
+  $max_attachment_size = $redmine_dms::params::max_attachment_size,
 ) inherits redmine_dms::params {
 
   # DATABASE STAGE
@@ -203,14 +205,20 @@ class redmine_dms (
     install_command => 'bundle exec rake redmine:plugins NAME=redmine_checklists RAILS_ENV=production',
   }
 
+  # Redmine agile plugin
+  redmine::plugin { 'redmine_agile':
+    source => $agile_vcs_repo,
+    install_command => 'bundle exec rake redmine:plugins NAME=redmine_checklists RAILS_ENV=production',
+  }
+
 
   # Web server for Redmine
   if !defined(Class['nginx']) {
     class { 'nginx': }
   }
   redmine::vhost_nginx { "$redmine_site":
-    root_dir      => $redmine_rootdir,
-    serveraliases => [ $server_aliases ],
+    root_dir            => $redmine_rootdir,
+    serveraliases       => [ $server_aliases ],
+    max_attachment_size => $max_attachment_size,
   }
-
 }
