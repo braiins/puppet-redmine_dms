@@ -36,17 +36,25 @@
 # [*chklst_vcs_repo*]
 #   VCS from where the checklist plugin is being cloned from
 #
+# [*agile_vcs_repo*]
+#   VCS from where the agile plugin is being cloned from
+#
+# [*max_attachment_size *]
+#   maximum size of attachments - sets nginx's 'client_max_body_size' param
+#
 # === Examples
 #
 # class { '::redmine_dms':
-#   redmine_version  => '3.2.0',
-#   redmine_sys_user => 'redmine',
-#   redmine_projects => [ 'pr1', 'pr2' ],
-#   redmine_site     => 'redmine',
-#   db_name          => 'redmine',
-#   db_user          => 'redmine',
-#   db_password      => 'my_pass',
-#   chklst_vcs_repo  => 'ssh://git@localhost/redmine_checklists.git',
+#   redmine_version     => '3.2.0',
+#   redmine_sys_user    => 'redmine',
+#   redmine_projects    => [ 'pr1', 'pr2' ],
+#   redmine_site        => 'redmine',
+#   db_name             => 'redmine',
+#   db_user             => 'redmine',
+#   db_password         => 'my_pass',
+#   chklst_vcs_repo     => 'ssh://git@localhost/redmine_checklists.git',
+#   agile_vcs_repo      => 'ssh://git@localhost/redmine_agile.git',
+#   max_attachment_size => '20M',
 # }
 #
 # === Authors
