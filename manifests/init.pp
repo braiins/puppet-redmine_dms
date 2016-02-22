@@ -155,7 +155,7 @@ class redmine_dms (
 
   # Redmine DMSF plugin
   redmine::plugin { 'redmine_dmsf':
-    revision        => 'v1.5.5',
+    revision        => 'v1.5.6',
     source          => 'https://github.com/danmunn/redmine_dmsf',
     install_command => 'bundle install --path ~/.gem --without development test mysql; bundle exec rake redmine:plugins:migrate RAILS_ENV=production',
   } ->
