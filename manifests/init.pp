@@ -216,7 +216,7 @@ class redmine_dms (
   # Redmine agile plugin
   redmine::plugin { 'redmine_agile':
     source => $agile_vcs_repo,
-    install_command => 'bundle exec rake redmine:plugins NAME=redmine_checklists RAILS_ENV=production',
+    install_command => 'bundle exec rake redmine:plugins NAME=redmine_agile RAILS_ENV=production',
   }
 
 
